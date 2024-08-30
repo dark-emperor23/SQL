@@ -1,0 +1,76 @@
+WITH RankedProducts AS (
+    SELECT 
+        customer_id, 
+        product_name, 
+        placed_gmv,
+        ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY placed_gmv DESC) AS rank
+    FROM 
+        dataset
+)
+SELECT 
+    customer_id, 
+    product_name, 
+    placed_gmv
+FROM 
+    RankedProducts
+WHERE 
+    rank <= 3
+ORDER BY 
+    customer_id, rank;
+
+WITH RankedProducts AS (
+    SELECT 
+        customer_id, 
+        product_name, 
+        placed_gmv,
+        ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY placed_gmv DESC) AS rank
+    FROM 
+        dataset
+)
+SELECT 
+    customer_id, 
+    product_name, 
+    placed_gmv
+FROM 
+    RankedProducts
+WHERE 
+    rank <= 3
+ORDER BY 
+    customer_id, rank;
+
+
+SELECT
+    d.customer_id,
+    d.placed_gmv AS last_order_value,
+    NULL AS total_orders,
+    NULL AS first_order_date,
+    NULL AS last_order_date
+FROM dataset d
+JOIN (
+    SELECT customer_id, MAX(order_date) AS last_order_date
+    FROM dataset
+    GROUP BY customer_id
+) sub ON d.customer_id = sub.customer_id AND d.order_date = sub.last_order_date;
+
+
+WITH RankedProducts AS (
+    SELECT 
+        customer_id, 
+        product_name, 
+        placed_gmv,
+        ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY placed_gmv DESC) AS rank
+    FROM 
+        dataset
+)
+SELECT 
+    customer_id, 
+    product_name, 
+    placed_gmv
+FROM 
+    RankedProducts
+WHERE 
+    rank <= 3
+ORDER BY 
+    customer_id, rank;
+	
+	
